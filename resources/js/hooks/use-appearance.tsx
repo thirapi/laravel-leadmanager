@@ -37,8 +37,8 @@ const getStoredAppearance = (): Appearance => {
     return (localStorage.getItem('appearance') as Appearance) || 'system';
 };
 
-const isDarkMode = (appearance: Appearance): boolean => {
-    return appearance === 'dark' || (appearance === 'system' && prefersDark());
+const isDarkMode = (_appearance: Appearance): boolean => {
+    return false;
 };
 
 const applyTheme = (appearance: Appearance): void => {
