@@ -51,10 +51,8 @@ const statusColors: Record<Lead['status'], string> = {
 };
 
 export default function LeadsIndex({ leads }: LeadsIndexProps) {
-    const { props } = usePage();
-    const flash = (props as Record<string, unknown>).flash as
-        | { type?: string; message?: string }
-        | undefined;
+    // `flash` is a top-level page property (sibling of `props`), not inside `props`.
+    const { flash } = usePage();
 
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
@@ -63,17 +61,19 @@ export default function LeadsIndex({ leads }: LeadsIndexProps) {
     });
 
     useEffect(() => {
-        if (flash?.message) {
-            const showToast =
-                flash.type === 'success'
-                    ? toast.success
-                    : flash.type === 'error'
-                      ? toast.error
-                      : flash.type === 'warning'
-                        ? toast.warning
-                        : toast.info;
-            showToast(flash.message);
+        if (!flash.message) {
+            return;
         }
+
+        const showToast =
+            flash.type === 'success'
+                ? toast.success
+                : flash.type === 'error'
+                  ? toast.error
+                  : flash.type === 'warning'
+                    ? toast.warning
+                    : toast.info;
+        showToast(flash.message);
     }, [flash]);
 
     const handleSubmit = (e: React.FormEvent) => {

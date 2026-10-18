@@ -29,6 +29,13 @@ class LeadController extends Controller
 
         Lead::create($validated);
 
-        return redirect()->route('leads.index')->with('success', 'Lead created successfully.');
+        // Inertia reads flash data from the `inertia.flash_data` session key,
+        // not from Laravel's `->with()`, so the toast can be picked up by React.
+        Inertia::flash([
+            'type' => 'success',
+            'message' => 'Lead created successfully.',
+        ]);
+
+        return redirect()->route('leads.index');
     }
 }
